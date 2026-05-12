@@ -1,0 +1,88 @@
+---
+title: Netting Engine
+description: How Magnus eliminates most bridge transactions through multilateral netting
+---
+
+The Magnus Netting Engine matches opposing payment flows before they reach the bridge layer. If someone in the US is sending USDT to Vietnam at the same time someone in Vietnam is sending USDT to the US, those flows cancel out — no bridge transaction needed, settlement is instant.
+
+At scale, the netting engine targets 90%+ efficiency: most cross-corridor payments settle without touching a bridge at all.
+
+## Why netting matters
+
+Every bridge transaction has costs:
+
+- **Time:** 5-30 minutes for cross-chain settlement
+- **Fees:** Bridge protocols charge 0.05-0.3% per transaction
+- **Liquidity:** Operators must pre-position capital on both sides of every corridor
+- **Risk:** Bridge contracts are targets for exploits ($4.3B lost to bridge hacks historically)
+
+Netting eliminates these costs for matched flows. Only the net unmatched volume touches the bridge layer.
+
+## How it works
+
+```
+Without netting:
+
+  US → Vietnam: 100,000 USDT  →  [bridge tx] →  100,000 USDT
+  Vietnam → US: 80,000 USDT   →  [bridge tx] →   80,000 USDT
+  Total bridged: 180,000 USDT
+  Bridge fees: ~$360
+  Settlement time: 10-60 minutes each
+
+With netting:
+
+  US → Vietnam: 100,000 USDT  ─┐
+                                ├─ net: 20,000 USDT  →  [bridge tx]
+  Vietnam → US:  80,000 USDT  ─┘
+  Total bridged: 20,000 USDT
+  Bridge fees: ~$40 (89% savings)
+  Settlement time: seconds for 80,000 USDT, minutes for 20,000 USDT
+```
+
+The netting window is one block — approximately 200ms. Flows that enter the same block are matched before block finalization.
+
+## CLS-style settlement model
+
+Magnus netting is inspired by CLS (Continuous Linked Settlement), the bank-operated foreign exchange settlement system that processes $6.5T in FX trades daily with near-zero settlement risk. CLS eliminates bilateral settlement risk by simultaneously settling both legs of a currency pair.
+
+Magnus applies the same principle to stablecoin flows across corridors, implemented at the protocol level rather than through a centralized clearing institution.
+
+## Netting layers
+
+**Layer 1 — On-chain matching (per block)**
+
+Within each block, the netting engine matches opposing flows in the same corridor. Matched flows settle as internal ledger entries — no bridge, no swap, no external movement.
+
+**Layer 2 — Corridor netting (rolling window)**
+
+Flows that don't match within a single block enter a rolling netting window across multiple blocks. The window duration is configurable by corridor based on typical flow patterns.
+
+**Layer 3 — Bridge settlement (residual)**
+
+Only the net unmatched residual exits Magnus via the MBS bridge. This is the smallest possible bridge volume for a given set of flows.
+
+## Gas-free sends — netting makes it sustainable
+
+Magnus absorbs destination gas costs for users. The economic model works because netting dramatically reduces the actual settlement cost:
+
+- At 90%+ netting efficiency, only ~10% of volume needs bridge settlement
+- Bridge settlement cost is split across 10x the volume it actually represents
+- The per-transaction cost drops below the gas fees collected
+
+At 1M daily transactions with 96% netting efficiency, the protocol settles only 40,000 transactions through the bridge layer — a 25x compression of actual bridge costs.
+
+## Netting and compliance
+
+The netting engine runs inside Magnus's protocol-level compliance layer. Every flow that enters netting is checked against the same compliance rules as bridge transactions:
+
+- Sanctioned address screening
+- Transaction limits
+- Gateway reporting obligations
+
+Netting does not bypass compliance — it compresses the number of external settlements that need to be reported.
+
+## Current status
+
+The netting engine specification is complete. Implementation targets the Phase 3 milestone (Q4 2026). On Staccato devnet, all transactions settle directly without netting — the bridge and netting layers are not yet active on devnet.
+
+The gateway and bridge layers (Phase 1-2) are prerequisites. Netting reaches full efficiency once corridor volume is sufficient to generate meaningful match rates.

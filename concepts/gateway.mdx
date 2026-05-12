@@ -1,0 +1,99 @@
+---
+title: Gateway Protocol
+description: Protocol-native fiat rail integration — VietQR, UPI, PIX, M-Pesa, and more
+---
+
+The Magnus Gateway Protocol (MGP) is a set of protocol-native operations that connect Magnus to local payment rails around the world. Sending stablecoins to a VietQR bank account in Vietnam, a UPI address in India, or an M-Pesa wallet in Kenya happens in a single Magnus transaction — not through a third-party integration layer.
+
+## The problem with application-layer gateways
+
+Today, moving stablecoins to a local bank account requires multiple steps across multiple platforms:
+
+1. Send USDT on Tron to an exchange
+2. Exchange converts USDT to local currency
+3. Exchange initiates a bank transfer via local rails
+4. Recipient waits 15 minutes to several hours
+
+Each step adds latency, fees, and counterparty risk. The integrations are application-layer — built by individual companies, not standardized by a protocol. Every operator rebuilds the same plumbing.
+
+## How MGP works
+
+Magnus registers licensed financial entities (Gateways) on-chain. A Gateway is an entity with:
+
+- A local operating license in their jurisdiction
+- Integration with one or more local payment rails
+- Staked collateral on Magnus to ensure performance
+- On-chain registration through the Gateway precompile
+
+Once registered, any Magnus wallet can initiate a fiat payout to any Gateway's supported rails using standard EVM transactions.
+
+```
+User transaction on Magnus:
+  GatewayWithdraw(
+    gateway: 0x...,        // registered gateway address
+    token: mVND,           // stablecoin to convert
+    amount: 2450000,       // 2,450,000 mVND
+    rail: "vietqr",        // target payment rail
+    destination: "0123456789", // bank account / phone number
+    memo: "rent payment"
+  )
+
+Result:
+  → Magnus escrows 2,450,000 mVND from user wallet
+  → Gateway receives settlement signal
+  → Gateway pushes VND to 0123456789 via VietQR/NAPAS
+  → Gateway confirms delivery on-chain
+  → Escrow releases, settlement complete
+  → Total time: under 5 minutes
+```
+
+## Supported rails
+
+| Rail | Country | Status |
+|---|---|---|
+| VietQR / NAPAS | Vietnam | In development |
+| UPI | India | Planned |
+| PIX | Brazil | Planned |
+| M-Pesa | Kenya, Tanzania | Planned |
+| GCash | Philippines | Planned |
+| PromptPay | Thailand | Planned |
+
+## Protocol-level escrow
+
+Unlike application-layer integrations, MGP uses on-chain escrow enforced by the protocol:
+
+1. User's stablecoins are locked in the Gateway precompile before fiat is sent
+2. Gateway must confirm fiat delivery on-chain to unlock settlement
+3. If Gateway fails to confirm within the timeout window, funds return to user
+4. Gateway's on-chain stake can be slashed for provable non-delivery (Phase 2)
+
+This creates a trustless settlement guarantee — gateways are accountable to the chain, not just to their legal agreements.
+
+## Comparison to Stellar anchors
+
+Stellar has the closest prior art — Stellar anchors (SEP-6/24/31) allow similar fiat withdrawals. Magnus's key differences:
+
+| | Stellar Anchors | Magnus MGP |
+|---|---|---|
+| Integration layer | Application-layer standard | Protocol-native precompile |
+| EVM compatibility | No | Yes — standard EVM calls |
+| Settlement guarantee | SEP-31 legal agreement | On-chain escrow |
+| Compliance | Application-layer | Protocol-level compliance precompile |
+| DeFi composability | No | Yes — gateway calls compose with swaps |
+
+## PathPayment — one transaction, any route
+
+MGP integrates with Magnus's routing layer. A single `PathPayment` transaction can:
+
+1. Accept USDT from a Tron bridge
+2. Swap to mVND via the enshrined DEX
+3. Route through the netting engine (if a matching inbound exists)
+4. Settle to VietQR if no net offset is found
+
+The user sees one transaction. The protocol handles the routing.
+
+## Building on MGP
+
+Gateway interactions use standard Solidity calls to the Gateway precompile address. The `@magnus/sdk` includes precompile ABIs and helper functions for building gateway transactions.
+
+See the [SDK Precompiles reference](/sdk/precompiles) for full ABI documentation.

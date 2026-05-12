@@ -1,0 +1,86 @@
+---
+title: Gas Layer
+description: How Magnus makes gas invisible — pay in any stablecoin you hold
+---
+
+Every blockchain has a gas layer — the mechanism that prices and collects transaction fees. On Ethereum it's ETH. On Tron it's TRX. On Solana it's SOL. The gas token is always a separate asset from the stablecoin you're actually trying to move.
+
+Magnus redesigns the gas layer from the ground up. The gas token is whatever stablecoin you hold.
+
+## The problem with existing gas layers
+
+A Vietnamese user wants to send 100 USDT to a family member. On Tron today:
+
+1. User holds 100 USDT
+2. User needs TRX to pay the 3-5 TRX gas fee
+3. User must buy TRX from an exchange or OTC desk
+4. User holds USDT + TRX
+5. Transaction goes through
+6. User still holds leftover TRX with no other use
+
+At scale, this creates real friction. Payment operators must pre-fund gas wallets on every chain they support. Individual users need to manage multiple assets. Every chain integration means a new gas token to source and maintain.
+
+## How Magnus solves it
+
+Magnus introduces the `feeToken` field in its type-0x76 transaction format. When you submit a transaction, you specify which registered stablecoin covers the gas cost.
+
+```
+Standard chain transaction:
+  Send 100 USDT, pay gas in TRX (separate token)
+
+Magnus transaction:
+  Send 100 USDT, pay gas in mVND (same wallet)
+  feeToken: mVND_ADDRESS
+```
+
+The FeeManager precompile handles the conversion and settlement behind the scenes. The validator receives their fee in the network's settlement currency. The user pays in whatever they hold.
+
+## Protocol-native vs paymaster contracts
+
+ERC-4337 paymasters on other chains can sponsor gas for users, but require:
+
+- Smart contract wallets (standard EOA wallets don't work)
+- A developer-run paymaster service that must be funded and maintained
+- Per-application scope — only works within apps that integrate the paymaster
+- Additional transaction overhead per operation
+
+Magnus gas-in-any-stablecoin works for **every wallet, every transaction, every application** with zero developer setup. It is part of the protocol itself.
+
+| | ERC-4337 Paymaster | Magnus Gas Layer |
+|---|---|---|
+| Wallet type required | Smart contract wallet | Any standard wallet |
+| Developer setup | Run + fund paymaster service | None |
+| Scope | Per-application | All transactions |
+| Overhead | Extra transactions | None |
+
+## FX reporters
+
+Magnus runs on-chain FX reporters that publish real-time exchange rates. The FeeManager uses these rates to calculate the correct amount in any fee token.
+
+Three reporters are live on Staccato devnet:
+
+- **mVND/USD** — Vietnamese Dong rate, updated continuously
+- **mEUR/USD** — Euro rate, updated continuously
+- **mUSD** — Pegged 1:1 to USD, always stable
+
+The FX rate is baked into the block at transaction time. There is no oracle delay.
+
+## Registered fee tokens
+
+Only tokens registered through the Magnus token registry can be used as fee tokens. Registration requires meeting the MIP-20 standard and going through on-chain governance.
+
+Current registered fee tokens on Staccato devnet:
+
+| Token | Symbol | Peg |
+|---|---|---|
+| Magnus USD | mUSD | US Dollar |
+| Magnus VND | mVND | Vietnamese Dong |
+| Magnus EUR | mEUR | Euro |
+
+## What this means for developers
+
+**Payment apps:** Users never need to think about gas. Fund their wallet with mVND, they can transact indefinitely. No gas refill operations, no failed transactions from empty gas wallets.
+
+**Exchanges:** Withdrawals work in any registered token. Users can receive funds and immediately transact without acquiring a gas token first.
+
+**AI agents:** Agents funded with a single stablecoin can operate autonomously without any gas wallet management. See [x402 Agent Payments](/build/x402-agents).
