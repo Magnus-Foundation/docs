@@ -24,16 +24,6 @@
     "name": "Try Devnet",
     "url": "https://devnet.magnuschain.xyz"
   },
-  "tabs": [
-    {
-      "name": "SDK Reference",
-      "url": "sdk"
-    },
-    {
-      "name": "RPC Reference",
-      "url": "rpc"
-    }
-  ],
   "anchors": [
     {
       "name": "Block Explorer",
@@ -99,11 +89,7 @@
     {
       "group": "SDK Reference",
       "pages": [
-        "sdk/overview",
-        "sdk/chain",
-        "sdk/transaction",
-        "sdk/rpc",
-        "sdk/precompiles"
+        "sdk/overview"
       ]
     },
     {
