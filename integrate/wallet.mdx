@@ -1,0 +1,74 @@
+---
+title: Wallet Integration
+description: Add Magnus support to your wallet
+---
+
+## Chain configuration
+
+Add Magnus to your wallet's supported chain list:
+
+```typescript
+import { magnusDevnet, magnusMainnet } from '@magnus/sdk/chains'
+
+// Viem-compatible chain objects, ready to use
+```
+
+## Transaction parsing
+
+Magnus type-0x76 transactions include a `feeToken` field. Standard EVM transaction parsers treat this as an unknown transaction type and may reject or display incorrectly.
+
+Use the Magnus SDK decoder:
+
+```typescript
+import { decodeMagnusTransaction } from '@magnus/sdk/transaction'
+
+const tx = decodeMagnusTransaction(rawTxHex)
+
+// Display to user
+console.log(`Sending: ${tx.value} to ${tx.to}`)
+console.log(`Gas paid in: ${tx.feeToken}`)  // show token symbol, not address
+```
+
+## Displaying the fee token
+
+Users should see the fee token symbol (e.g., "mVND") not the raw address. Look up the symbol from the token registry:
+
+```typescript
+import { getFeeTokens } from '@magnus/sdk/rpc'
+
+const tokens = await getFeeTokens(client)
+const feeTokenMap = Object.fromEntries(tokens.map(t => [t.address, t]))
+
+// In your transaction display
+const feeTokenInfo = feeTokenMap[tx.feeToken]
+console.log(`Network fee: ~0.001 ${feeTokenInfo.symbol}`)
+```
+
+## Signing type-0x76 transactions
+
+If your wallet signs raw transactions (hardware wallets, MPC wallets), use the Magnus SDK serializer:
+
+```typescript
+import { buildMagnusTransaction, serializeMagnusTransaction } from '@magnus/sdk/transaction'
+
+const tx = buildMagnusTransaction({ ...txParams, feeToken })
+// Send to hardware wallet for signing...
+const signed = { ...tx, signature }
+const serialized = serializeMagnusTransaction(signed)
+```
+
+## Fee token selection UI
+
+Consider adding a fee token selector to your send flow. Users should be able to choose which stablecoin pays gas.
+
+The current fee tokens and their FX rates are available from `magnus_feeTokens` RPC. Show the estimated fee in the user's chosen currency.
+
+```typescript
+const quote = await getFeeQuote(client, {
+  feeToken: selectedToken.address,
+  transaction: pendingTx
+})
+
+// Show in send confirmation UI
+// "Network fee: 23 mVND (~$0.001)"
+```

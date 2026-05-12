@@ -1,0 +1,36 @@
+---
+title: Precompiles
+description: Magnus built-in smart contract interfaces
+---
+
+Magnus ships two precompiles — smart contracts at fixed addresses that are part of the protocol, not deployed by developers.
+
+| Precompile | Address | Purpose |
+|---|---|---|
+| FeeManager | `0x...` | Manages registered fee tokens and fee conversion |
+| MIP-20 | `0x...` | Multi-currency token standard interface |
+
+## FeeManager
+
+The FeeManager precompile handles multi-currency fee settlement. It maintains the registry of tokens that can be used as fee tokens and the FX rates used to calculate fee amounts in each token.
+
+[FeeManager Reference →](/precompiles/fee-manager)
+
+## MIP-20
+
+MIP-20 is Magnus's extension of ERC-20 for protocol-native stablecoins. Every registered fee token implements MIP-20. It adds FX rate reporting and registration functions on top of the standard ERC-20 interface.
+
+[MIP-20 Reference →](/precompiles/mip20)
+
+## Using precompiles with viem
+
+```typescript
+import { FeeManager } from '@magnus/sdk/precompiles'
+
+const feeTokens = await client.readContract({
+  ...FeeManager,
+  functionName: 'registeredTokens'
+})
+```
+
+Precompile ABIs are exported from `@magnus/sdk/precompiles` — no need to copy ABI JSON manually.

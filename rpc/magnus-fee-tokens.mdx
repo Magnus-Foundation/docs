@@ -1,0 +1,57 @@
+---
+title: magnus_feeTokens
+description: List all registered fee tokens on Magnus
+---
+
+Returns all MIP-20 tokens currently registered as valid fee tokens.
+
+## Request
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "magnus_feeTokens",
+  "params": [],
+  "id": 1
+}
+```
+
+## Response
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "address": "0x...",
+      "symbol": "mVND",
+      "name": "Magnus Vietnamese Dong",
+      "decimals": 18,
+      "fxRate": "25000.00"
+    },
+    {
+      "address": "0x...",
+      "symbol": "mUSD",
+      "name": "Magnus USD",
+      "decimals": 18,
+      "fxRate": "1.00"
+    },
+    {
+      "address": "0x...",
+      "symbol": "mEUR",
+      "name": "Magnus Euro",
+      "decimals": 18,
+      "fxRate": "0.92"
+    }
+  ],
+  "id": 1
+}
+```
+
+## Using with @magnus/sdk
+
+```typescript
+import { getFeeTokens } from '@magnus/sdk/rpc'
+
+const tokens = await getFeeTokens(client)
+```

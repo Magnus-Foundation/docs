@@ -1,0 +1,83 @@
+---
+title: Send a Transaction
+description: Sign and submit transactions on Magnus
+---
+
+## Simple transfer
+
+```typescript
+import { createWalletClient, http, parseEther } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+import { magnusDevnet, mVND_ADDRESS } from '@magnus/sdk/chains'
+
+const account = privateKeyToAccount('0x...')
+const walletClient = createWalletClient({
+  account,
+  chain: magnusDevnet,
+  transport: http()
+})
+
+const hash = await walletClient.sendTransaction({
+  to: '0xRecipientAddress',
+  value: parseEther('0'),
+  feeToken: mVND_ADDRESS
+})
+```
+
+## Token transfer (MIP-20 / ERC-20)
+
+```typescript
+import { parseUnits } from 'viem'
+import { erc20Abi } from 'viem'
+
+// Transfer 100 USDT, pay gas in mVND
+const hash = await walletClient.writeContract({
+  address: USDT_ADDRESS,
+  abi: erc20Abi,
+  functionName: 'transfer',
+  args: [recipientAddress, parseUnits('100', 6)],
+  feeToken: mVND_ADDRESS
+})
+```
+
+## Wait for confirmation
+
+Magnus finality is deterministic. Once `waitForTransactionReceipt` resolves, the transaction is final — no additional confirmations needed.
+
+```typescript
+const receipt = await publicClient.waitForTransactionReceipt({ hash })
+
+console.log('Status:', receipt.status)        // 'success' | 'reverted'
+console.log('Block:', receipt.blockNumber)    // final block
+console.log('Gas used:', receipt.gasUsed)     // in fee token units
+```
+
+## Raw type-0x76 transaction
+
+For direct transaction building (exchange withdrawals, advanced use cases):
+
+```typescript
+import {
+  buildMagnusTransaction,
+  signMagnusTransaction,
+  serializeMagnusTransaction
+} from '@magnus/sdk/transaction'
+
+const tx = buildMagnusTransaction({
+  to: recipientAddress,
+  value: 0n,
+  data: '0x',
+  feeToken: mVND_ADDRESS,
+  nonce: await publicClient.getTransactionCount({ address: account.address }),
+  chainId: magnusDevnet.id,
+  maxFeePerGas: parseGwei('1'),
+  maxPriorityFeePerGas: parseGwei('1')
+})
+
+const signed = await signMagnusTransaction(tx, account.privateKey)
+const serialized = serializeMagnusTransaction(signed)
+
+const hash = await publicClient.sendRawTransaction({
+  serializedTransaction: serialized
+})
+```

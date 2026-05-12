@@ -1,0 +1,75 @@
+---
+title: Connect to Magnus
+description: Add Magnus to your application
+---
+
+## Using viem (recommended)
+
+```typescript
+import { createPublicClient, createWalletClient, http } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+import { magnusDevnet } from '@magnus/sdk/chains'
+
+// Read-only client
+const publicClient = createPublicClient({
+  chain: magnusDevnet,
+  transport: http()
+})
+
+// Signing client
+const account = privateKeyToAccount('0x...')
+const walletClient = createWalletClient({
+  account,
+  chain: magnusDevnet,
+  transport: http()
+})
+```
+
+## Using ethers.js
+
+```typescript
+import { ethers } from 'ethers'
+
+const provider = new ethers.JsonRpcProvider(
+  'https://staccato-rpc.magnuschain.xyz',
+  {
+    chainId: 73730,
+    name: 'magnus-devnet'
+  }
+)
+```
+
+## Using web3.js
+
+```typescript
+import Web3 from 'web3'
+
+const web3 = new Web3('https://staccato-rpc.magnuschain.xyz')
+```
+
+## MetaMask / browser wallet
+
+Add Magnus Staccato devnet manually:
+
+| Field | Value |
+|---|---|
+| Network name | Magnus Staccato Devnet |
+| RPC URL | `https://staccato-rpc.magnuschain.xyz` |
+| Chain ID | `73730` |
+| Currency symbol | `mUSD` |
+| Block explorer | `https://devnet.magnuschain.xyz` |
+
+Or add programmatically:
+
+```typescript
+await window.ethereum.request({
+  method: 'wallet_addEthereumChain',
+  params: [{
+    chainId: '0x11FC2',
+    chainName: 'Magnus Staccato Devnet',
+    rpcUrls: ['https://staccato-rpc.magnuschain.xyz'],
+    blockExplorerUrls: ['https://devnet.magnuschain.xyz'],
+    nativeCurrency: { name: 'Magnus USD', symbol: 'mUSD', decimals: 18 }
+  }]
+})
+```

@@ -1,0 +1,52 @@
+---
+title: magnus_sendTransaction
+description: Submit a signed type-0x76 transaction to Magnus
+---
+
+Submits a signed Magnus type-0x76 transaction to the network. Equivalent to `eth_sendRawTransaction` but validates the Magnus-specific `feeToken` field.
+
+## Request
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "magnus_sendTransaction",
+  "params": ["0x76..."],
+  "id": 1
+}
+```
+
+`params[0]` — RLP-encoded signed type-0x76 transaction. Use `serializeMagnusTransaction` from `@magnus/sdk/transaction` to produce this.
+
+## Response
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": "0x4a2b...",
+  "id": 1
+}
+```
+
+`result` — the transaction hash.
+
+## Error codes
+
+| Code | Message | Cause |
+|---|---|---|
+| `-32602` | `invalid feeToken` | The `feeToken` address is not in the registered fee token list |
+| `-32602` | `insufficient feeToken balance` | Sender does not hold enough of the fee token to cover gas |
+| `-32000` | `nonce too low` | Transaction nonce already used |
+
+## Using with @magnus/sdk
+
+```typescript
+import { serializeMagnusTransaction } from '@magnus/sdk/transaction'
+
+const serialized = serializeMagnusTransaction(signedTx)
+
+// Via eth_sendRawTransaction (also works)
+const hash = await client.sendRawTransaction({
+  serializedTransaction: serialized
+})
+```

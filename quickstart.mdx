@@ -1,0 +1,90 @@
+---
+title: Quickstart
+description: Connect to Magnus and send your first transaction in under 5 minutes
+---
+
+## Install the SDK
+
+```bash
+npm install @magnus/sdk
+# or
+yarn add @magnus/sdk
+```
+
+## Connect to Magnus devnet
+
+```typescript
+import { createPublicClient } from 'viem'
+import { magnusDevnet } from '@magnus/sdk/chains'
+
+const client = createPublicClient({
+  chain: magnusDevnet,
+  transport: http('https://staccato-rpc.magnuschain.xyz')
+})
+
+const block = await client.getBlockNumber()
+console.log('Latest block:', block)
+```
+
+## Send a transaction with mVND gas
+
+The key difference from other chains: set `feeToken` to pay gas in any stablecoin you hold.
+
+```typescript
+import { createWalletClient, http } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+import { magnusDevnet, mVND_ADDRESS, mUSD_ADDRESS } from '@magnus/sdk/chains'
+import { serializeMagnusTransaction } from '@magnus/sdk/transaction'
+
+const account = privateKeyToAccount('0x...')
+
+const walletClient = createWalletClient({
+  account,
+  chain: magnusDevnet,
+  transport: http('https://staccato-rpc.magnuschain.xyz')
+})
+
+// Send USDT, pay gas in mVND — no ETH needed
+const hash = await walletClient.sendTransaction({
+  to: '0xRecipientAddress',
+  value: 0n,
+  data: '0x',
+  // Magnus extension: pay gas in any registered MIP-20 token
+  feeToken: mVND_ADDRESS
+})
+
+console.log('Transaction hash:', hash)
+```
+
+## Check the transaction
+
+```typescript
+const receipt = await client.waitForTransactionReceipt({ hash })
+console.log('Confirmed in block:', receipt.blockNumber)
+// Finality is deterministic — if it's in a block, it's final
+```
+
+## View on block explorer
+
+Every transaction is visible on the Staccato devnet explorer:
+
+```
+https://devnet.magnuschain.xyz/tx/{hash}
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Multi-currency fees" icon="coins" href="/concepts/multi-currency-fees">
+    Learn how gas-in-any-stablecoin works at the protocol level
+  </Card>
+  <Card title="x402 agent payments" icon="robot" href="/build/x402-agents">
+    Build AI agents that pay in any currency with zero gas management
+  </Card>
+  <Card title="Exchange integration" icon="building-columns" href="/integrate/exchange">
+    Integrate Magnus with your exchange or wallet
+  </Card>
+  <Card title="SDK reference" icon="book" href="/sdk/overview">
+    Full @magnus/sdk API reference
+  </Card>
+</CardGroup>

@@ -1,0 +1,75 @@
+---
+title: Setting the Fee Token
+description: How to specify which stablecoin pays gas for your transaction
+---
+
+The `feeToken` field is what makes Magnus different. Set it to any registered MIP-20 token address and that token pays the gas for your transaction.
+
+## With @magnus/sdk
+
+```typescript
+import { createMagnusClient, mVND_ADDRESS } from '@magnus/sdk'
+
+const client = createMagnusClient({
+  chain: magnusDevnet,
+  transport: http()
+})
+
+// Send a transaction with mVND paying gas
+const hash = await walletClient.sendTransaction({
+  to: recipientAddress,
+  value: parseEther('0'),
+  feeToken: mVND_ADDRESS  // pay gas in Vietnamese dong
+})
+```
+
+## Get available fee tokens
+
+```typescript
+import { getFeeTokens } from '@magnus/sdk/rpc'
+
+const tokens = await getFeeTokens(client)
+// [
+//   { address: '0x...', symbol: 'mVND', decimals: 18 },
+//   { address: '0x...', symbol: 'mUSD', decimals: 18 },
+//   { address: '0x...', symbol: 'mEUR', decimals: 18 },
+// ]
+```
+
+## Get fee estimate before sending
+
+```typescript
+import { getFeeQuote } from '@magnus/sdk/rpc'
+
+const quote = await getFeeQuote(client, {
+  feeToken: mVND_ADDRESS,
+  transaction: {
+    to: recipientAddress,
+    data: '0x'
+  }
+})
+
+console.log(`Estimated fee: ${quote.amount} mVND`)
+// Example: "Estimated fee: 23 mVND" (~$0.001)
+```
+
+## Auto-select fee token from wallet balance
+
+```typescript
+import { selectFeeToken } from '@magnus/sdk/utils'
+
+// Automatically picks the first fee token the wallet holds
+const feeToken = await selectFeeToken(client, {
+  account: walletAddress,
+  // Optional: prefer order
+  preference: [mVND_ADDRESS, mUSD_ADDRESS]
+})
+
+console.log(`Using fee token: ${feeToken.symbol}`)
+```
+
+## What happens if I don't set feeToken
+
+If `feeToken` is omitted, Magnus defaults to the chain's native currency (`mUSD`). The transaction is still valid — it just uses mUSD for gas instead of your preferred token.
+
+For most applications, explicitly setting `feeToken` is recommended so users pay fees in the token they already hold.

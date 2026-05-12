@@ -1,0 +1,120 @@
+---
+title: Exchange Integration
+description: Integrate Magnus with your exchange or custodian
+---
+
+Magnus is a Route 66 participant chain. [Route 66](https://commonware.xyz/blogs/route-66) is a Commonware and Coinbase joint initiative to standardize exchange, wallet, and custodian integration for specialized blockchains like Magnus.
+
+## What makes Magnus different to integrate
+
+Magnus uses two non-standard primitives that require attention:
+
+**1. Type-0x76 transactions.** Magnus introduces a new transaction type extending EIP-1559 with a `feeToken` field. Standard EVM transaction parsers will reject these. Use `@magnus/sdk` for serialization and deserialization.
+
+**2. Multi-currency fee settlement.** Users pay gas in MIP-20 tokens rather than a native gas token. Your exchange needs to query the token registry for fee token balances alongside standard token balances.
+
+## Prerequisites
+
+- Magnus devnet RPC access: `https://staccato-rpc.magnuschain.xyz`
+- `@magnus/sdk` installed
+- Familiarity with standard EVM integration patterns
+
+## Deposit detection
+
+Standard `eth_getLogs` + `Transfer` event monitoring works for all MIP-20 tokens on Magnus, identical to ERC-20 on Ethereum.
+
+```typescript
+import { createPublicClient, http, parseAbiItem } from 'viem'
+import { magnusDevnet } from '@magnus/sdk/chains'
+
+const client = createPublicClient({
+  chain: magnusDevnet,
+  transport: http('https://staccato-rpc.magnuschain.xyz')
+})
+
+// Monitor USDT deposits
+const logs = await client.getLogs({
+  address: USDT_ADDRESS,
+  event: parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
+  args: { to: YOUR_DEPOSIT_ADDRESS },
+  fromBlock: 'latest'
+})
+```
+
+## Transaction parsing
+
+Type-0x76 transactions include a `feeToken` field that standard parsers ignore or reject. Use the Magnus SDK decoder.
+
+```typescript
+import { decodeMagnusTransaction } from '@magnus/sdk/transaction'
+
+// Decode a raw Magnus transaction
+const tx = decodeMagnusTransaction(rawTxHex)
+
+console.log(tx.type)       // 0x76
+console.log(tx.feeToken)   // the token used to pay gas
+console.log(tx.to)         // recipient
+console.log(tx.value)      // amount
+```
+
+## Withdrawal signing
+
+```typescript
+import { signMagnusTransaction, serializeMagnusTransaction } from '@magnus/sdk/transaction'
+
+const signedTx = await signMagnusTransaction({
+  to: recipientAddress,
+  value: amount,
+  feeToken: mUSD_ADDRESS,  // or whichever token the user wants to pay gas with
+  nonce: await client.getTransactionCount({ address: HOT_WALLET }),
+  chainId: magnusDevnet.id
+}, privateKey)
+
+const hash = await client.sendRawTransaction({
+  serializedTransaction: serializeMagnusTransaction(signedTx)
+})
+```
+
+## Balance queries
+
+Query both stablecoin balances and available fee token balances:
+
+```typescript
+import { getFeeTokens, getTokenBalance } from '@magnus/sdk/rpc'
+
+// Get all registered fee tokens
+const feeTokens = await getFeeTokens(client)
+// Returns: [{ address, symbol, decimals }, ...]
+
+// Query user balance for each token
+for (const token of feeTokens) {
+  const balance = await getTokenBalance(client, {
+    token: token.address,
+    account: userAddress
+  })
+  console.log(`${token.symbol}: ${balance}`)
+}
+```
+
+## Confirmations and finality
+
+Magnus uses Commonware Simplex BFT consensus — finality is **deterministic**, not probabilistic.
+
+- A transaction in a confirmed block is **final**. There are no reorgs.
+- **1 confirmation is sufficient** for all deposit and withdrawal operations.
+- Block time is approximately 200ms.
+
+Do not apply Ethereum-style confirmation counts to Magnus. 1 confirmation = final.
+
+```typescript
+const receipt = await client.waitForTransactionReceipt({ hash })
+// receipt.blockNumber is confirmed = irreversible final
+```
+
+## Route 66 integration support
+
+Magnus is a Route 66 participant. Commonware and Coinbase provide shared integration libraries, documentation, and direct technical support for exchanges integrating Route 66 chains.
+
+Contact [route66@commonware.xyz](mailto:route66@commonware.xyz) to access Route 66 exchange integration resources.
+
+For Magnus-specific integration questions, contact [integrate@magnuschain.xyz](mailto:integrate@magnuschain.xyz).

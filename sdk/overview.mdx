@@ -1,0 +1,101 @@
+---
+title: SDK Overview
+description: "@magnus/sdk — the JavaScript SDK for Magnus"
+---
+
+`@magnus/sdk` is the single dependency anything written in JavaScript needs to talk to Magnus correctly.
+
+```bash
+npm install @magnus/sdk
+```
+
+## What's included
+
+| Module | Import | Purpose |
+|---|---|---|
+| Chain definitions | `@magnus/sdk/chains` | viem chain config for Magnus mainnet, testnet, devnet |
+| Transaction | `@magnus/sdk/transaction` | Type-0x76 serializer, parser, signer |
+| RPC | `@magnus/sdk/rpc` | Magnus-specific JSON-RPC methods (`magnus_*`) |
+| Precompiles | `@magnus/sdk/precompiles` | FeeManager and MIP-20 precompile ABIs and helpers |
+| Utils | `@magnus/sdk/utils` | Currency formatting, hash helpers, address utilities |
+
+## Chain definitions
+
+```typescript
+import { magnusMainnet, magnusTestnet, magnusDevnet } from '@magnus/sdk/chains'
+import { createPublicClient, http } from 'viem'
+
+const client = createPublicClient({
+  chain: magnusDevnet,
+  transport: http()
+})
+```
+
+## Transaction module
+
+```typescript
+import {
+  buildMagnusTransaction,
+  signMagnusTransaction,
+  serializeMagnusTransaction,
+  decodeMagnusTransaction
+} from '@magnus/sdk/transaction'
+```
+
+## RPC module
+
+Magnus-specific RPC methods not available in standard viem:
+
+```typescript
+import { getFeeTokens, getFeeQuote } from '@magnus/sdk/rpc'
+
+// List all registered fee tokens
+const tokens = await getFeeTokens(client)
+
+// Get fee estimate in a specific token
+const quote = await getFeeQuote(client, {
+  feeToken: mVND_ADDRESS,
+  transaction: { to, value, data }
+})
+console.log(`Fee: ${quote.amount} mVND`)
+```
+
+## Precompiles module
+
+```typescript
+import { FeeManager, MIP20 } from '@magnus/sdk/precompiles'
+
+// Read fee token list from FeeManager precompile
+const feeTokens = await client.readContract({
+  ...FeeManager,
+  functionName: 'registeredTokens'
+})
+```
+
+## TypeScript support
+
+`@magnus/sdk` is written in TypeScript and ships full type definitions. No `@types` package needed.
+
+```typescript
+import type { MagnusTransaction, FeeToken, FeeQuote } from '@magnus/sdk'
+```
+
+## Viem extensions
+
+Magnus extends viem's `PublicClient` with Magnus-specific actions:
+
+```typescript
+import { createMagnusClient } from '@magnus/sdk'
+
+const client = createMagnusClient({
+  chain: magnusDevnet,
+  transport: http()
+})
+
+// Standard viem methods work
+const block = await client.getBlockNumber()
+
+// Plus Magnus extensions
+const feeTokens = await client.getFeeTokens()
+const quote = await client.getFeeQuote({ feeToken: mVND_ADDRESS, ... })
+```

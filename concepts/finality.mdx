@@ -1,0 +1,56 @@
+---
+title: Finality
+description: 300ms deterministic finality on Magnus
+---
+
+Magnus uses Commonware Simplex BFT consensus. Finality is **deterministic** — once a transaction is included in a confirmed block, it is final. There are no reorgs.
+
+## Block time and finality time
+
+| Metric | Value |
+|---|---|
+| Target block time | ~200ms |
+| Finality time | Under 300ms (1 block) |
+| Finality type | Deterministic (BFT) |
+| Reorg possible | No |
+
+## What deterministic finality means
+
+On Ethereum, "finality" is probabilistic. A transaction in a recent block can technically be reverted if a reorg occurs — exchanges and services wait for multiple confirmations (typically 12-64 blocks, 2-12 minutes) to reduce this risk.
+
+On Magnus, **1 confirmation = final**. There is no risk of reorg after a block is confirmed by the Simplex BFT committee. Exchanges, payment processors, and applications can treat a single block confirmation as irreversible.
+
+## How Simplex BFT works
+
+Commonware Simplex is a BFT (Byzantine Fault Tolerant) consensus protocol. A block is finalized when a quorum of validators (2/3+) sign off on it. This quorum certificate is embedded in each block header.
+
+Magnus validators run Simplex nodes. The validator set and their BLS12-381 public keys are stored on-chain and updated through the governance process.
+
+## Implications for developers
+
+**Wallets.** Show "confirmed" immediately after 1 block. No need for a "pending" state beyond the initial mempool wait.
+
+**Exchanges.** 1 confirmation is sufficient for deposits and withdrawals. Standard Ethereum confirmation counts (12, 32, 64 blocks) are not appropriate for Magnus.
+
+**Payment applications.** The 300ms finality enables payment UX that feels instant to users. A send transaction submitted by the user is confirmed before they can read the confirmation screen.
+
+**Bridges.** Magnus finalization certificates (BLS threshold signatures) can be verified on destination chains using EIP-2537 BLS precompiles. This enables trust-minimized bridges without waiting for long Ethereum confirmation windows.
+
+## Checking finality programmatically
+
+```typescript
+import { createPublicClient, http } from 'viem'
+import { magnusDevnet } from '@magnus/sdk/chains'
+
+const client = createPublicClient({
+  chain: magnusDevnet,
+  transport: http('https://staccato-rpc.magnuschain.xyz')
+})
+
+const receipt = await client.waitForTransactionReceipt({ hash })
+
+// If receipt exists, the transaction is final.
+// No additional confirmation blocks needed.
+console.log('Final at block:', receipt.blockNumber)
+console.log('Status:', receipt.status) // 'success' | 'reverted'
+```

@@ -1,0 +1,35 @@
+---
+title: Route 66
+description: Standardized exchange and wallet integration for Magnus via Commonware and Coinbase
+---
+
+Magnus is a Route 66 participant chain.
+
+[Route 66](https://commonware.xyz/blogs/route-66) is an initiative co-led by Commonware and Coinbase (with a strategic investment from Coinbase Ventures) to standardize integration of specialized blockchains — chains with custom transaction types, novel cryptography, or application-specific precompiles — with exchanges, wallets, and custodians.
+
+## Why Route 66 matters for Magnus
+
+Magnus uses type-0x76 transactions and custom precompiles (FeeManager, MIP-20). These are the exact features that make specialized chains slow to integrate. Route 66 provides shared standards, libraries, and tooling to reduce this friction.
+
+As a Route 66 participant, Magnus gets:
+
+- **Shared integration documentation** — standard patterns for exchange and wallet integration of Commonware-based chains
+- **Common libraries** — shared serializers and parsers for custom transaction types
+- **Direct Coinbase ecosystem connection** — Coinbase Ventures backed Commonware as part of the Route 66 launch
+- **Working group access** — early-adopter channel for exchanges integrating Route 66 chains
+
+## For exchanges integrating Magnus
+
+If your exchange is integrating Magnus, Route 66 provides the path of least resistance. Rather than building custom Magnus integration from scratch, you can leverage the shared Route 66 integration layer.
+
+**Contact:** [route66@commonware.xyz](mailto:route66@commonware.xyz) to access Route 66 exchange resources.
+
+**Magnus integration contact:** [integrate@magnuschain.xyz](mailto:integrate@magnuschain.xyz) for Magnus-specific questions.
+
+See the [Exchange Integration](/integrate/exchange) guide for the technical details.
+
+## For wallet developers
+
+Route 66 standardization includes wallet integration — adding Magnus support to existing EVM wallets. The type-0x76 transaction format and multi-currency fee display are the two areas Route 66 addresses for wallets.
+
+`@magnus/sdk` provides the wallet integration primitives. Route 66 provides the coordination layer.

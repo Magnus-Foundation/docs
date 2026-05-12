@@ -1,0 +1,87 @@
+---
+title: Network
+description: Magnus network configuration and endpoints
+---
+
+## Staccato Devnet
+
+The live Magnus devnet. Use this for development and testing.
+
+| Parameter | Value |
+|---|---|
+| Network name | Magnus Staccato Devnet |
+| Chain ID | `73730` |
+| RPC URL | `https://staccato-rpc.magnuschain.xyz` |
+| Block explorer | `https://devnet.magnuschain.xyz` |
+| Currency symbol | mUSD |
+| Block time | ~200ms |
+| Finality | Deterministic (Simplex BFT) |
+
+## Add to MetaMask
+
+```json
+{
+  "chainId": "0x11FC2",
+  "chainName": "Magnus Staccato Devnet",
+  "rpcUrls": ["https://staccato-rpc.magnuschain.xyz"],
+  "blockExplorerUrls": ["https://devnet.magnuschain.xyz"],
+  "nativeCurrency": {
+    "name": "Magnus USD",
+    "symbol": "mUSD",
+    "decimals": 18
+  }
+}
+```
+
+## Registered fee tokens
+
+These MIP-20 tokens are registered as valid gas tokens on Magnus Staccato devnet.
+
+| Token | Symbol | Address | Denomination |
+|---|---|---|---|
+| Magnus USD | mUSD | `0x...` | US Dollar |
+| Magnus VND | mVND | `0x...` | Vietnamese Dong |
+| Magnus EUR | mEUR | `0x...` | Euro |
+
+Any registered MIP-20 token can be used as a `feeToken` in a Magnus transaction. The FeeManager precompile handles the conversion and settlement.
+
+<Info>
+  Native USDT and USDC are also accepted as fee tokens when bridged to Magnus via MBS. Check the token registry for the current full list.
+</Info>
+
+## Viem chain configuration
+
+```typescript
+import { defineChain } from 'viem'
+
+export const magnusDevnet = defineChain({
+  id: 73730,
+  name: 'Magnus Staccato Devnet',
+  nativeCurrency: {
+    name: 'Magnus USD',
+    symbol: 'mUSD',
+    decimals: 18
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://staccato-rpc.magnuschain.xyz']
+    }
+  },
+  blockExplorers: {
+    default: {
+      name: 'Magnus Explorer',
+      url: 'https://devnet.magnuschain.xyz'
+    }
+  }
+})
+```
+
+Or import directly from `@magnus/sdk`:
+
+```typescript
+import { magnusDevnet } from '@magnus/sdk/chains'
+```
+
+## Mainnet
+
+Magnus mainnet is in development. Chain ID and endpoints will be published ahead of launch.

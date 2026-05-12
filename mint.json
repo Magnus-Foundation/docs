@@ -1,0 +1,120 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Magnus",
+  "logo": {
+    "dark": "/logo/magnus-dark.svg",
+    "light": "/logo/magnus-light.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#E8A020",
+    "light": "#F5B84A",
+    "dark": "#0B1929",
+    "background": {
+      "dark": "#0B1929"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/Magnus-Foundation"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Try Devnet",
+    "url": "https://devnet.magnuschain.xyz"
+  },
+  "tabs": [
+    {
+      "name": "SDK Reference",
+      "url": "sdk"
+    },
+    {
+      "name": "RPC Reference",
+      "url": "rpc"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Block Explorer",
+      "icon": "cube",
+      "url": "https://devnet.magnuschain.xyz"
+    },
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "url": "https://github.com/Magnus-Foundation"
+    },
+    {
+      "name": "Discord",
+      "icon": "discord",
+      "url": "https://discord.gg/magnus"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "network"
+      ]
+    },
+    {
+      "group": "Core Concepts",
+      "pages": [
+        "concepts/multi-currency-fees",
+        "concepts/stablecoin-neutral",
+        "concepts/finality"
+      ]
+    },
+    {
+      "group": "Build",
+      "pages": [
+        "build/connect",
+        "build/send-transaction",
+        "build/fee-token",
+        "build/x402-agents"
+      ]
+    },
+    {
+      "group": "Precompiles",
+      "pages": [
+        "precompiles/overview",
+        "precompiles/fee-manager",
+        "precompiles/mip20"
+      ]
+    },
+    {
+      "group": "Integrate",
+      "pages": [
+        "integrate/exchange",
+        "integrate/wallet",
+        "integrate/route66"
+      ]
+    },
+    {
+      "group": "SDK Reference",
+      "pages": [
+        "sdk/overview",
+        "sdk/chain",
+        "sdk/transaction",
+        "sdk/rpc",
+        "sdk/precompiles"
+      ]
+    },
+    {
+      "group": "RPC Reference",
+      "pages": [
+        "rpc/overview",
+        "rpc/magnus-fee-tokens",
+        "rpc/magnus-send-transaction"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "x": "https://x.com/magnuschain",
+    "github": "https://github.com/Magnus-Foundation",
+    "discord": "https://discord.gg/magnus"
+  }
+}

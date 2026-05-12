@@ -1,0 +1,33 @@
+---
+title: RPC Overview
+description: Magnus JSON-RPC API reference
+---
+
+Magnus supports the standard Ethereum JSON-RPC API plus Magnus-specific methods prefixed with `magnus_`.
+
+**Devnet RPC:** `https://staccato-rpc.magnuschain.xyz`
+
+## Standard Ethereum methods
+
+All standard `eth_*` methods are supported. See the [Ethereum JSON-RPC spec](https://ethereum.org/en/developers/docs/apis/json-rpc/) for reference.
+
+Common methods:
+- `eth_blockNumber`
+- `eth_getBalance`
+- `eth_sendRawTransaction`
+- `eth_getTransactionReceipt`
+- `eth_getLogs`
+- `eth_call`
+- `eth_estimateGas`
+
+## Magnus-specific methods
+
+| Method | Description |
+|---|---|
+| `magnus_feeTokens` | List all registered fee tokens |
+| `magnus_feeQuote` | Get fee estimate in a specific token |
+| `magnus_sendTransaction` | Send a type-0x76 transaction |
+
+[magnus_feeTokens →](/rpc/magnus-fee-tokens)
+
+[magnus_sendTransaction →](/rpc/magnus-send-transaction)
