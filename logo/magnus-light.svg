@@ -1,7 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 160">
-  <!-- Mark: navy on transparent, scaled to 140px tall, centered vertically -->
-  <g transform="translate(10 10) scale(0.2703) translate(-215 -248)">
-    <path fill="#0B1929" d="
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="180 240 650 540">
+  <path fill="#0B1929" d="
 M219.505127,758.299561
 C216.914719,753.690857 215.623093,749.174133 215.624924,744.172119
 C215.672989,613.174011 215.616882,482.175903 215.697006,351.177887
@@ -93,16 +91,4 @@ C655.348328,321.573700 637.464783,341.149689 623.461792,364.686127
 C589.731812,421.380005 555.985168,478.064056 522.364685,534.822815
 C516.079102,545.434265 508.402557,554.692261 498.054260,562.643372
 z"/>
-  </g>
-  <!-- Wordmark: Magnus -->
-  <text
-    x="185"
-    y="100"
-    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-    font-size="76"
-    font-weight="800"
-    letter-spacing="-2"
-    fill="#0B1929"
-    dominant-baseline="middle"
-  >Magnus</text>
 </svg>
