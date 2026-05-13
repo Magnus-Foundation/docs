@@ -14,7 +14,7 @@ Every bridge transaction has costs:
 - **Time:** 5-30 minutes for cross-chain settlement
 - **Fees:** Bridge protocols charge 0.05-0.3% per transaction
 - **Liquidity:** Operators must pre-position capital on both sides of every corridor
-- **Risk:** Bridge contracts are targets for exploits (\$4.3B lost to bridge hacks historically)
+- **Risk:** Bridge contracts are targets for exploits (4.3B lost to bridge hacks historically)
 
 Netting eliminates these costs for matched flows. Only the net unmatched volume touches the bridge layer.
 
@@ -43,7 +43,7 @@ The netting window is one block, approximately 200ms. Flows that enter the same 
 
 ## CLS-style settlement model
 
-Magnus netting is inspired by CLS (Continuous Linked Settlement), the bank-operated foreign exchange settlement system that processes $6.5T in FX trades daily with near-zero settlement risk. CLS eliminates bilateral settlement risk by simultaneously settling both legs of a currency pair.
+Magnus netting is inspired by CLS (Continuous Linked Settlement), the bank-operated foreign exchange settlement system that processes 6.5T in FX trades daily with near-zero settlement risk. CLS eliminates bilateral settlement risk by simultaneously settling both legs of a currency pair.
 
 Magnus applies the same principle to stablecoin flows across corridors, implemented at the protocol level rather than through a centralized clearing institution.
 
