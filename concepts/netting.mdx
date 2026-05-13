@@ -14,7 +14,7 @@ Every bridge transaction has costs:
 - **Time:** 5-30 minutes for cross-chain settlement
 - **Fees:** Bridge protocols charge 0.05-0.3% per transaction
 - **Liquidity:** Operators must pre-position capital on both sides of every corridor
-- **Risk:** Bridge contracts are targets for exploits ($4.3B lost to bridge hacks historically)
+- **Risk:** Bridge contracts are targets for exploits (\$4.3B lost to bridge hacks historically)
 
 Netting eliminates these costs for matched flows. Only the net unmatched volume touches the bridge layer.
 
@@ -26,7 +26,7 @@ Without netting:
   US -> Vietnam: 100,000 USDT  ->  [bridge tx] ->  100,000 USDT
   Vietnam -> US: 80,000 USDT   ->  [bridge tx] ->   80,000 USDT
   Total bridged: 180,000 USDT
-  Bridge fees: ~$360
+  Bridge fees: ~\$360
   Settlement time: 10-60 minutes each
 
 With netting:
@@ -35,7 +35,7 @@ With netting:
                                 +- net: 20,000 USDT  ->  [bridge tx]
   Vietnam -> US:  80,000 USDT  -+
   Total bridged: 20,000 USDT
-  Bridge fees: ~$40 (89% savings)
+  Bridge fees: ~\$40 (89% savings)
   Settlement time: seconds for 80,000 USDT, minutes for 20,000 USDT
 ```
 
