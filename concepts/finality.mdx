@@ -3,7 +3,7 @@ title: Finality
 description: 300ms deterministic finality on Magnus
 ---
 
-Magnus uses Commonware Simplex BFT consensus. Finality is **deterministic** — once a transaction is included in a confirmed block, it is final. There are no reorgs.
+Magnus uses Commonware Simplex BFT consensus. Finality is **deterministic**. Once a transaction is included in a confirmed block, it is final. There are no reorgs.
 
 ## Block time and finality time
 
@@ -16,7 +16,7 @@ Magnus uses Commonware Simplex BFT consensus. Finality is **deterministic** — 
 
 ## What deterministic finality means
 
-On Ethereum, "finality" is probabilistic. A transaction in a recent block can technically be reverted if a reorg occurs — exchanges and services wait for multiple confirmations (typically 12-64 blocks, 2-12 minutes) to reduce this risk.
+On Ethereum, "finality" is probabilistic. A transaction in a recent block can technically be reverted if a reorg occurs. Exchanges and services wait for multiple confirmations (typically 12-64 blocks, 2-12 minutes) to reduce this risk.
 
 On Magnus, **1 confirmation = final**. There is no risk of reorg after a block is confirmed by the Simplex BFT committee. Exchanges, payment processors, and applications can treat a single block confirmation as irreversible.
 

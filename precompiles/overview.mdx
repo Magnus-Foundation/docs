@@ -3,7 +3,7 @@ title: Precompiles
 description: Magnus built-in smart contract interfaces
 ---
 
-Magnus ships two precompiles — smart contracts at fixed addresses that are part of the protocol, not deployed by developers.
+Magnus ships two precompiles: smart contracts at fixed addresses that are part of the protocol, not deployed by developers.
 
 | Precompile | Address | Purpose |
 |---|---|---|
@@ -33,4 +33,4 @@ const feeTokens = await client.readContract({
 })
 ```
 
-Precompile ABIs are exported from `@magnus/sdk/precompiles` — no need to copy ABI JSON manually.
+Precompile ABIs are exported from `@magnus/sdk/precompiles`. No need to copy ABI JSON manually.

@@ -3,7 +3,7 @@ title: Issuer Neutrality
 description: Why Magnus is governed by no stablecoin issuer
 ---
 
-Between September 2025 and May 2026, three major stablecoin chains launched or raised significant capital — each controlled by or aligned with a single issuer:
+Between September 2025 and May 2026, three major stablecoin chains launched or raised significant capital, each controlled by or aligned with a single issuer:
 
 | Chain | Issuer alignment | Funding | Key backers |
 |---|---|---|---|
@@ -12,13 +12,13 @@ Between September 2025 and May 2026, three major stablecoin chains launched or r
 | **Plasma** | Tether / USDT | $373M total | Bitfinex, Founders Fund (Peter Thiel) |
 | **Stable** | Tether / USDT-as-gas | $28M Seed | Bitfinex |
 
-This creates a structural problem: on Circle's chain, USDT is a second-class citizen. On Tether's chain, USDC is unwelcome. Stripe will not optimize Tempo for stablecoins that compete with Bridge USD1. Every issuer building their own chain has an incentive — and now the capital — to favor their own stable.
+This creates a structural problem: on Circle's chain, USDT is a second-class citizen. On Tether's chain, USDC is unwelcome. Stripe will not optimize Tempo for stablecoins that compete with Bridge USD1. Every issuer building their own chain has an incentive, and now the capital, to favor their own stable.
 
 Magnus is governed by no issuer. No single stablecoin has preferred status in the protocol.
 
 ## What neutrality means in practice
 
-**Fee token parity.** Any registered MIP-20 token can be used as a fee token. mVND, mUSD, USDT, USDC — all treated equally by the FeeManager precompile. No token gets lower fees or priority ordering.
+**Fee token parity.** Any registered MIP-20 token can be used as a fee token. mVND, mUSD, USDT, USDC are all treated equally by the FeeManager precompile. No token gets lower fees or priority ordering.
 
 **No issuer in the validator set.** Magnus validator selection is based on stake, not issuer relationship. Circle, Tether, and Stripe do not have privileged validator positions.
 
@@ -28,16 +28,16 @@ Magnus is governed by no issuer. No single stablecoin has preferred status in th
 
 ## Who benefits from neutrality
 
-**Stablecoin issuers** who don't want their token to be second-class on a rival's chain. PYUSD (PayPal), EURC (Circle's Euro stable), XSGD (Singapore dollar stable), regional stables — all have equal standing on Magnus.
+**Stablecoin issuers** who don't want their token to be second-class on a rival's chain. PYUSD (PayPal), EURC (Circle's Euro stable), XSGD (Singapore dollar stable), and regional stables all have equal standing on Magnus.
 
 **DeFi protocols** that need liquidity from multiple stablecoins. A Curve-style pool on Magnus can hold USDT and USDC in equal depth without one token being disadvantaged.
 
-**Treasury managers** who hold mixed stablecoin portfolios. March 2023 USDC depeg caused significant concern for single-issuer exposure. A neutral chain supports diversified stablecoin treasury positions.
+**Treasury managers** who hold mixed stablecoin portfolios. The March 2023 USDC depeg caused significant concern for single-issuer exposure. A neutral chain supports diversified stablecoin treasury positions.
 
-**Exchanges and payment operators** in corridors where both USDT and USDC matter. Vietnam is a clear example — USDT dominates local exchange volume while USDC is growing through institutional flows. An operator on Magnus can support both natively.
+**Exchanges and payment operators** in corridors where both USDT and USDC matter. Vietnam is a clear example. USDT dominates local exchange volume while USDC is growing through institutional flows. An operator on Magnus can support both natively.
 
 ## The Switzerland position
 
-No existing L1 can claim issuer neutrality once an issuer has a financial stake in the chain. Stripe can't make Tempo neutral — they own the chain and their stablecoin bridge. Circle can't make Arc neutral — it's their product.
+No existing L1 can claim issuer neutrality once an issuer has a financial stake in the chain. Stripe can't make Tempo neutral: they own the chain and their stablecoin bridge. Circle can't make Arc neutral: it's their product.
 
 Magnus's neutrality is structural, not a policy. There is no issuer at the cap table. The protocol treats all registered MIP-20 tokens identically. This is a position no incumbent chain can replicate without contradicting their own issuance business.

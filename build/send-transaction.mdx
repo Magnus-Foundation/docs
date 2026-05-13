@@ -42,7 +42,7 @@ const hash = await walletClient.writeContract({
 
 ## Wait for confirmation
 
-Magnus finality is deterministic. Once `waitForTransactionReceipt` resolves, the transaction is final — no additional confirmations needed.
+Magnus finality is deterministic. Once `waitForTransactionReceipt` resolves, the transaction is final. No additional confirmations are needed.
 
 ```typescript
 const receipt = await publicClient.waitForTransactionReceipt({ hash })

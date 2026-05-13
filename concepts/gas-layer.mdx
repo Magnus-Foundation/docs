@@ -1,9 +1,9 @@
 ---
 title: Gas Layer
-description: How Magnus makes gas invisible — pay in any stablecoin you hold
+description: How Magnus handles gas fees. Pay in any stablecoin you hold.
 ---
 
-Every blockchain has a gas layer — the mechanism that prices and collects transaction fees. On Ethereum it's ETH. On Tron it's TRX. On Solana it's SOL. The gas token is always a separate asset from the stablecoin you're actually trying to move.
+Every blockchain has a gas layer: the mechanism that prices and collects transaction fees. On Ethereum it's ETH. On Tron it's TRX. On Solana it's SOL. The gas token is always a separate asset from the stablecoin you're actually trying to move.
 
 Magnus redesigns the gas layer from the ground up. The gas token is whatever stablecoin you hold.
 
@@ -41,7 +41,7 @@ ERC-4337 paymasters on other chains can sponsor gas for users, but require:
 
 - Smart contract wallets (standard EOA wallets don't work)
 - A developer-run paymaster service that must be funded and maintained
-- Per-application scope — only works within apps that integrate the paymaster
+- Per-application scope: only works within apps that integrate the paymaster
 - Additional transaction overhead per operation
 
 Magnus gas-in-any-stablecoin works for **every wallet, every transaction, every application** with zero developer setup. It is part of the protocol itself.
@@ -59,9 +59,9 @@ Magnus runs on-chain FX reporters that publish real-time exchange rates. The Fee
 
 Three reporters are live on Staccato devnet:
 
-- **mVND/USD** — Vietnamese Dong rate, updated continuously
-- **mEUR/USD** — Euro rate, updated continuously
-- **mUSD** — Pegged 1:1 to USD, always stable
+- **mVND/USD:** Vietnamese Dong rate, updated continuously
+- **mEUR/USD:** Euro rate, updated continuously
+- **mUSD:** Pegged 1:1 to USD, always stable
 
 The FX rate is baked into the block at transaction time. There is no oracle delay.
 

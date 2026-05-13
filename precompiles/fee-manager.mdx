@@ -11,8 +11,8 @@ The FeeManager precompile manages the registry of tokens that can be used as gas
 
 ```typescript
 import { FeeManager } from '@magnus/sdk/precompiles'
-// FeeManager.address — precompile address
-// FeeManager.abi — full ABI
+// FeeManager.address -- precompile address
+// FeeManager.abi -- full ABI
 ```
 
 ## Read functions
@@ -39,7 +39,7 @@ const rate = await client.readContract({
   functionName: 'fxRate',
   args: [mVND_ADDRESS]
 })
-// 25000000000000000000000n — represents 25,000 VND per USD
+// 25000000000000000000000n -- represents 25,000 VND per USD
 ```
 
 ### `isRegistered(address token)`
@@ -59,8 +59,8 @@ const valid = await client.readContract({
 
 Three FX reporters publish rates to the FeeManager on Staccato devnet:
 
-- mVND/USD reporter — publishes Vietnamese Dong exchange rate
-- mEUR/USD reporter — publishes Euro exchange rate
-- mUSD reporter — always returns 1.0 (USD-pegged)
+- mVND/USD reporter: publishes Vietnamese Dong exchange rate
+- mEUR/USD reporter: publishes Euro exchange rate
+- mUSD reporter: always returns 1.0 (USD-pegged)
 
 Reporters are live and updating continuously. Query `fxRate()` for the current value.

@@ -44,7 +44,7 @@ const walletClient = createWalletClient({
   transport: http('https://staccato-rpc.magnuschain.xyz')
 })
 
-// Send USDT, pay gas in mVND — no ETH needed
+// Send USDT, pay gas in mVND. No ETH needed.
 const hash = await walletClient.sendTransaction({
   to: '0xRecipientAddress',
   value: 0n,
@@ -61,7 +61,7 @@ console.log('Transaction hash:', hash)
 ```typescript
 const receipt = await client.waitForTransactionReceipt({ hash })
 console.log('Confirmed in block:', receipt.blockNumber)
-// Finality is deterministic — if it's in a block, it's final
+// Finality is deterministic. If it's in a block, it's final.
 ```
 
 ## View on block explorer

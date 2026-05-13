@@ -3,11 +3,11 @@ title: x402 AI Agent Payments
 description: Build AI agents that pay in any currency with zero gas management
 ---
 
-[x402](https://x402.org) is an open HTTP payment protocol (Apache 2.0, Linux Foundation) that lets AI agents pay for services using stablecoins. Magnus implements x402 with a multi-currency extension — agents pay both service fees and gas in the same token.
+[x402](https://x402.org) is an open HTTP payment protocol (Apache 2.0, Linux Foundation) that lets AI agents pay for services using stablecoins. Magnus implements x402 with a multi-currency extension. Agents pay both service fees and gas in the same token.
 
 On Base (Coinbase) with x402, agents need USDC for the service and ETH for gas. Two tokens, always.
 
-On Magnus with x402, agents need one token — whatever they hold.
+On Magnus with x402, agents need one token: whatever they hold.
 
 ## Install
 
@@ -15,7 +15,7 @@ On Magnus with x402, agents need one token — whatever they hold.
 npm install @magnus/x402
 ```
 
-## Server — return a 402 with Magnus payment options
+## Server: return a 402 with Magnus payment options
 
 ```typescript
 import express from 'express'
@@ -60,7 +60,7 @@ The response the agent receives:
 }
 ```
 
-## Agent — pay automatically from wallet balance
+## Agent: pay automatically from wallet balance
 
 ```typescript
 import { magnusAgent } from '@magnus/x402/client'
@@ -68,7 +68,7 @@ import { privateKeyToAccount } from 'viem/accounts'
 
 const account = privateKeyToAccount('0x...')
 
-// Agent wallet holds mVND — pays everything in mVND
+// Agent wallet holds mVND -- pays everything in mVND
 const agent = magnusAgent({
   account,
   // Auto-selects token from wallet balance matching server's accepts list
@@ -83,15 +83,15 @@ const data = await response.json()
 What happens under the hood:
 
 ```
-1. Agent → GET api.example.com/data
-2. Server → 402 { accepts: [mVND, mUSD, USDT] }
+1. Agent -> GET api.example.com/data
+2. Server -> 402 { accepts: [mVND, mUSD, USDT] }
 3. Agent checks wallet: holds mVND ✓
 4. Agent builds Magnus type-0x76 tx:
      value: 1000 mVND (service fee)
      feeToken: mVND  (gas also in mVND)
 5. Staccato confirms in 287ms
-6. Agent → GET api.example.com/data + X-Payment: { txHash }
-7. Server → 200 OK + data
+6. Agent -> GET api.example.com/data + X-Payment: { txHash }
+7. Server -> 200 OK + data
 
 Balance change: -1000 mVND (service) - 0.01 mVND (gas)
 ETH used: 0
@@ -106,18 +106,18 @@ Tokens managed: 1
 - Agents need ETH for gas
 - Developers must manage ETH gas refills in production
 
-Magnus x402 is the implementation for agents serving users outside the USD/Western context. A Vietnamese fintech deploying a payment agent, an Indonesian merchant accepting stablecoin payments, a regional DeFi protocol — these agents operate in VND, IDR, or mixed-stable environments where USDC-only is a limitation.
+Magnus x402 is the implementation for agents serving users outside the USD/Western context. A Vietnamese fintech deploying a payment agent, an Indonesian merchant accepting stablecoin payments, a regional DeFi protocol. These agents operate in VND, IDR, or mixed-stable environments where USDC-only is a limitation.
 
 ## The `gasAsset` extension
 
 `gasAsset` is a Magnus extension to the x402 `accepts` object. It signals to x402-compatible agent clients that the fee token for the Magnus transaction should match the payment token.
 
-This field is backwards-compatible — x402 clients that don't understand it ignore it. Magnus SDK clients use it to automatically set `feeToken = gasAsset` when building the payment transaction.
+This field is backwards-compatible. x402 clients that don't understand it ignore it. Magnus SDK clients use it to automatically set `feeToken = gasAsset` when building the payment transaction.
 
 ## Production checklist
 
 - [ ] Fund agent wallet with at least one Magnus-registered token
 - [ ] Set `autoSelectToken: true` in the agent client (or specify preferred token)
 - [ ] Server `accepts` list should include fallback tokens in priority order
-- [ ] Monitor agent balance — refill in the same token (no ETH needed)
+- [ ] Monitor agent balance. Refill in the same token (no ETH needed).
 - [ ] Test payment flow on Staccato devnet before mainnet

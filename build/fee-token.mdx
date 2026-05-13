@@ -70,6 +70,6 @@ console.log(`Using fee token: ${feeToken.symbol}`)
 
 ## What happens if I don't set feeToken
 
-If `feeToken` is omitted, Magnus defaults to the chain's native currency (`mUSD`). The transaction is still valid — it just uses mUSD for gas instead of your preferred token.
+If `feeToken` is omitted, Magnus defaults to the chain's native currency (`mUSD`). The transaction is still valid. It just uses mUSD for gas instead of your preferred token.
 
 For most applications, explicitly setting `feeToken` is recommended so users pay fees in the token they already hold.

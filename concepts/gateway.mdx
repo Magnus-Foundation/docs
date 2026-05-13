@@ -1,9 +1,9 @@
 ---
 title: Gateway Protocol
-description: Protocol-native fiat rail integration — VietQR, UPI, PIX, M-Pesa, and more
+description: Protocol-native fiat rail integration. VietQR, UPI, PIX, M-Pesa, and more.
 ---
 
-The Magnus Gateway Protocol (MGP) is a set of protocol-native operations that connect Magnus to local payment rails around the world. Sending stablecoins to a VietQR bank account in Vietnam, a UPI address in India, or an M-Pesa wallet in Kenya happens in a single Magnus transaction — not through a third-party integration layer.
+The Magnus Gateway Protocol (MGP) is a set of protocol-native operations that connect Magnus to local payment rails around the world. Sending stablecoins to a VietQR bank account in Vietnam, a UPI address in India, or an M-Pesa wallet in Kenya happens in a single Magnus transaction, without going through a third-party integration layer.
 
 ## The problem with application-layer gateways
 
@@ -14,7 +14,7 @@ Today, moving stablecoins to a local bank account requires multiple steps across
 3. Exchange initiates a bank transfer via local rails
 4. Recipient waits 15 minutes to several hours
 
-Each step adds latency, fees, and counterparty risk. The integrations are application-layer — built by individual companies, not standardized by a protocol. Every operator rebuilds the same plumbing.
+Each step adds latency, fees, and counterparty risk. The integrations are application-layer, built by individual companies, not standardized by a protocol. Every operator rebuilds the same plumbing.
 
 ## How MGP works
 
@@ -39,12 +39,12 @@ User transaction on Magnus:
   )
 
 Result:
-  → Magnus escrows 2,450,000 mVND from user wallet
-  → Gateway receives settlement signal
-  → Gateway pushes VND to 0123456789 via VietQR/NAPAS
-  → Gateway confirms delivery on-chain
-  → Escrow releases, settlement complete
-  → Total time: under 5 minutes
+  -> Magnus escrows 2,450,000 mVND from user wallet
+  -> Gateway receives settlement signal
+  -> Gateway pushes VND to 0123456789 via VietQR/NAPAS
+  -> Gateway confirms delivery on-chain
+  -> Escrow releases, settlement complete
+  -> Total time: under 5 minutes
 ```
 
 ## Supported rails
@@ -67,21 +67,21 @@ Unlike application-layer integrations, MGP uses on-chain escrow enforced by the 
 3. If Gateway fails to confirm within the timeout window, funds return to user
 4. Gateway's on-chain stake can be slashed for provable non-delivery (Phase 2)
 
-This creates a trustless settlement guarantee — gateways are accountable to the chain, not just to their legal agreements.
+Gateways are accountable to the chain, not just to their legal agreements.
 
 ## Comparison to Stellar anchors
 
-Stellar has the closest prior art — Stellar anchors (SEP-6/24/31) allow similar fiat withdrawals. Magnus's key differences:
+Stellar has the closest prior art. Stellar anchors (SEP-6/24/31) allow similar fiat withdrawals. Magnus's key differences:
 
 | | Stellar Anchors | Magnus MGP |
 |---|---|---|
 | Integration layer | Application-layer standard | Protocol-native precompile |
-| EVM compatibility | No | Yes — standard EVM calls |
+| EVM compatibility | No | Yes (standard EVM calls) |
 | Settlement guarantee | SEP-31 legal agreement | On-chain escrow |
 | Compliance | Application-layer | Protocol-level compliance precompile |
-| DeFi composability | No | Yes — gateway calls compose with swaps |
+| DeFi composability | No | Yes (gateway calls compose with swaps) |
 
-## PathPayment — one transaction, any route
+## PathPayment: one transaction, any route
 
 MGP integrates with Magnus's routing layer. A single `PathPayment` transaction can:
 

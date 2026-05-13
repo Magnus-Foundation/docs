@@ -3,13 +3,13 @@ title: Multi-Currency Fees
 description: How Magnus lets you pay gas in any stablecoin
 ---
 
-On every existing blockchain, gas is paid in a single native token — ETH, TRX, SOL, BNB. If you want to send USDT on Tron, you need TRX. If you want to send USDC on Ethereum, you need ETH. You always manage two assets.
+On every existing blockchain, gas is paid in a single native token: ETH, TRX, SOL, BNB. If you want to send USDT on Tron, you need TRX. If you want to send USDC on Ethereum, you need ETH. You always manage two assets.
 
 Magnus removes this at the protocol level.
 
 ## How it works
 
-Magnus transactions include a `feeToken` field — a MIP-20 token address specifying which stablecoin pays the gas fee. The FeeManager precompile handles conversion and settlement automatically.
+Magnus transactions include a `feeToken` field, a MIP-20 token address specifying which stablecoin pays the gas fee. The FeeManager precompile handles conversion and settlement automatically.
 
 ```
 Standard EVM transaction:
@@ -24,14 +24,14 @@ Magnus transaction:
 
 ## The type-0x76 transaction format
 
-Magnus introduces a new transaction type — `0x76` — that extends the standard EIP-1559 envelope with a `feeToken` field.
+Magnus introduces a new transaction type, `0x76`, that extends the standard EIP-1559 envelope with a `feeToken` field.
 
 ```typescript
 // Standard EIP-1559 (type 0x02)
 {
   to, value, data,
   maxFeePerGas, maxPriorityFeePerGas,
-  // no feeToken — always ETH
+  // no feeToken -- always ETH
 }
 
 // Magnus type-0x76
@@ -61,7 +61,7 @@ ERC-4337 paymasters on other chains can sponsor gas for users, but require:
 - Extra transaction overhead per operation
 - Only works within one application's scope
 
-Magnus multi-currency fees work for **every transaction, every wallet, every application** — no special setup. It is part of the protocol, not an application-layer workaround.
+Magnus multi-currency fees work for **every transaction, every wallet, every application** with no special setup. It is part of the protocol, not an application-layer workaround.
 
 | | ERC-4337 paymaster | Magnus feeToken |
 |---|---|---|
@@ -74,8 +74,8 @@ Magnus multi-currency fees work for **every transaction, every wallet, every app
 
 Any MIP-20 token registered in the Magnus token registry can be used as a fee token. Current registered tokens on Staccato devnet:
 
-- `mUSD` — Magnus USD (pegged to US Dollar)
-- `mVND` — Magnus Vietnamese Dong
-- `mEUR` — Magnus Euro
+- `mUSD`: Magnus USD (pegged to US Dollar)
+- `mVND`: Magnus Vietnamese Dong
+- `mEUR`: Magnus Euro
 
 Additional tokens (USDT, USDC when bridged via MBS) are added to the registry as integrations go live.
