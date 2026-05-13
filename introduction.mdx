@@ -1,53 +1,64 @@
 ---
 title: What is Magnus
-description: The neutral stablecoin chain for emerging markets
+description: The neutral digital currency infrastructure for emerging markets
 ---
 
-Magnus is an EVM-compatible Layer 1 blockchain built for stablecoin payments in emerging markets.
+Magnus is the neutral digital currency infrastructure for emerging markets.
 
-The core idea is simple: on every existing chain, you need a separate gas token to do anything. ETH on Ethereum, TRX on Tron, SOL on Solana. Magnus removes this entirely at the protocol level. You pay transaction fees in whatever stablecoin you already hold — mVND, mUSD, USDT, USDC, or mEUR.
+The past 12 months have seen Circle, Tether, and Stripe each launch their own stablecoin chain — Arc (USDC-aligned, $3B, backed by BlackRock and Apollo), Plasma (USDT-aligned, $373M, backed by Tether and Founders Fund), and Tempo (Stripe-Bridge-aligned, $5B). Each one is structurally aligned to a single issuer. On Circle's chain, USDT is a second-class citizen. On Tether's chain, USDC is unwelcome.
 
-## Why Magnus
+Magnus is the counter-position: the chain where every stablecoin is first-class, and where you pay gas in whatever you already hold.
 
-<CardGroup cols={2}>
-  <Card title="Gas in your currency" icon="coin">
-    Pay transaction fees in mVND, mUSD, mEUR, or any registered MIP-20 token. No separate gas token to buy or manage.
+## Three things Magnus does that others don't
+
+**Gas in your currency.** Send USDT, pay gas in mVND. No ETH. No TRX. No separate gas token to buy. This is built into the protocol — not a paymaster workaround, not per-app account abstraction. Every wallet, every transaction, automatic.
+
+**Issuer-neutral by design.** No single stablecoin issuer sits at the cap table. USDC, USDT, EURC, USDe, PYUSD, and regional stables like mVND — all registered and treated equally by the protocol.
+
+**Built for emerging markets.** The $19B/year Vietnam remittance corridor. The 5 newly licensed Vietnamese exchanges under the 2026 crypto sandbox. VietQR, UPI, PIX, and M-Pesa as protocol-native operations — not third-party integrations. The markets where USDT dominates, USDC is growing, and neither Arc nor Tempo is building.
+
+## Who builds on Magnus
+
+<CardGroup cols={3}>
+  <Card title="Payment apps" icon="mobile">
+    Users pay gas in their local stablecoin. No gas wallet management. No failed transactions from empty ETH wallets.
   </Card>
-  <Card title="Issuer-neutral" icon="scale-balanced">
-    No single stablecoin issuer controls Magnus. USDC, USDT, EURC, and regional stables are all first-class.
+  <Card title="AI agents" icon="robot">
+    x402 agent payments in any currency — service fee and gas in the same token. Zero ETH overhead.
   </Card>
-  <Card title="300ms finality" icon="bolt">
-    Commonware Simplex BFT consensus. Transactions confirm in under 300ms — deterministic, not probabilistic.
-  </Card>
-  <Card title="EVM compatible" icon="code">
-    Full EVM compatibility. Every Ethereum tool, wallet, and library works on Magnus with minor configuration.
+  <Card title="Exchanges and PSPs" icon="building-columns">
+    Route 66 standardized integration. Type-0x76 transaction support. 1-confirmation deterministic finality.
   </Card>
 </CardGroup>
 
-## How it differs from other chains
+## The competitive map
 
-| Chain | Gas token | Stablecoin alignment | Emerging market focus |
+| Chain | Gas token | Stablecoin alignment | Emerging markets |
 |---|---|---|---|
-| Ethereum | ETH (required) | Neutral | No |
 | Tron | TRX (required) | USDT-favored | Partial |
-| Arc (Circle) | — | USDC only | No |
-| Plasma (Tether) | — | USDT only | No |
-| Tempo (Stripe) | — | USD-centric | No |
+| Arc (Circle) | Any | USDC only | No |
+| Plasma (Tether) | Any | USDT only | No |
+| Tempo (Stripe) | Any | USD-centric | No |
 | **Magnus** | **Any stablecoin you hold** | **Neutral** | **Yes — SEA first** |
 
 ## Built on Commonware
 
-Magnus is built on [Commonware](https://commonware.xyz), a modular blockchain infrastructure toolkit. Commonware provides:
+Magnus is built on [Commonware](https://commonware.xyz), a modular blockchain infrastructure toolkit. On May 12, 2026, Commonware announced Route 66 — a joint initiative with Coinbase (strategic investment from Coinbase Ventures) to standardize exchange and wallet integration for specialized blockchains.
 
-- **Simplex BFT** consensus — 300ms deterministic finality
-- **BLS12-381 threshold signatures** — for secure cross-chain bridges
-- **Production-grade P2P networking** — no custom networking code
+Magnus is a Route 66 participant chain. Exchange and wallet integration uses Route 66 standards, backed by the Coinbase ecosystem.
 
-Magnus is a Route 66 participant chain. Route 66 is a Commonware and Coinbase joint initiative to standardize exchange, wallet, and custodian integration for specialized blockchains.
+Commonware provides:
+- **Simplex BFT** — 300ms deterministic finality, no reorgs
+- **BLS12-381 threshold signatures** — for the MBS cross-chain bridge
+- **Production-grade P2P** — battle-tested networking
+
+## The long game
+
+Magnus's near-term wedge is AI agent payments and the Vietnam remittance corridor. The long-term target is digital currency infrastructure for Southeast Asian central banks — the same compliance precompile, BFT consensus, and multi-currency support that payment apps use today is what a CBDC pilot requires tomorrow.
 
 ## Live network
 
-Magnus Staccato devnet is live.
+Staccato devnet is live.
 
 <CardGroup cols={2}>
   <Card title="RPC" icon="server" href="https://staccato-rpc.magnuschain.xyz">
